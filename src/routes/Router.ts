@@ -12,14 +12,14 @@ router.get('/', (req, res)=>{
 router.post('/post', uploads.single('file'), (req, res)=>{
     try {
         console.log(req.body)
-        res.status(201).json('Arquivo enviado com Sucesso')
+        res.status(201).json(`http://localhost:5577/files/${req.file?.filename}`)
     } catch (error) {
         console.log(error)
         res.status(500).json('Erro interno o Servidor.')
     }
 })
 
-router.get('/download/:filename', (req, res) => {
+router.get('/files/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(__dirname, '..', '..', 'storage', 'uploads', filename);
     res.status(200).sendfile(filePath)
