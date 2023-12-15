@@ -13,11 +13,13 @@
 
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" id="imageInput" name="file">
-        <button type="button" onclick="uploadFile()">Enviar</button>
+        
     </form>
+    <button type="button" id="buttonUpload">Enviar</button>
 
     <script>
-        function uploadFile() {
+        async function uploadFile(e) {
+
             const fileInput = document.getElementById('imageInput');
             const file = fileInput.files[0];
 
@@ -35,25 +37,29 @@
             formData.append('name', 'André Dias');
             formData.append('age', '16');
 
-            fetch(url, {
+            e.preventDefault();
+            const response = await fetch(url, {
                 method: 'POST',
                 body: formData,
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Erro no upload: ${response.statusText}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Upload bem-sucedido:', data);
-                    alert('Upload bem-sucedido!');
-                })
-                .catch(error => {
-                    console.error(error);
-                    alert('Erro ao enviar o arquivo. Consulte o console para obter detalhes.');
-                });
+
+            if (!response.ok) {
+                throw new Error(`Erro no upload: ${response.statusText}`);
+            }
+            else
+            {
+                const data = await response.json()
+                console.log(data)
+                const img = document.createElement('img')
+                img.src = data
+                document.appendChild(img)
+                alert('Sucesso!!!')
+            }   
         }
+
+        document.getElementById('buttonUpload').addEventListener('click', (e)=>{
+            uploadFile(e)
+        })
     </script>
 
 </body>
