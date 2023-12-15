@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Imagem</title>
+</head>
+
+<body>
+
+    <h2>Envio de Imagem</h2>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="imageInput" name="file">
+        <button type="button" onclick="uploadFile()">Enviar</button>
+    </form>
+
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('imageInput');
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert('Selecione um arquivo antes de enviar.');
+                return;
+            }
+
+            const url = 'http://localhost:5577/post'; // Substitua pelo URL do seu servidor
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Adicione outros dados ao FormData
+            formData.append('name', 'André Dias');
+            formData.append('age', '16');
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erro no upload: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Upload bem-sucedido:', data);
+                    alert('Upload bem-sucedido!');
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Erro ao enviar o arquivo. Consulte o console para obter detalhes.');
+                });
+        }
+    </script>
+
+</body>
+
+</html>
